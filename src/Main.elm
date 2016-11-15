@@ -1,6 +1,7 @@
 module Main exposing (main)
 
 import Html exposing (..)
+import Styles
 
 
 main : Program Flags Model Msg
