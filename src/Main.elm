@@ -4,8 +4,9 @@ import Css
 import Html exposing (..)
 import Html.CssHelpers
 import Styles
-import Components.DraftEntering as DraftEntering
+import Components.Draft as Draft
 import Components.Output as Output
+import SaveAble
 import TextUp
 
 
@@ -30,18 +31,18 @@ type alias Model a =
 
 
 type UiState
-    = EnteringText DraftEntering.Model
+    = EnteringText Draft.Model
 
 
 init : Flags -> ( Model {}, Cmd Msg )
 init flags =
-    { uiState = EnteringText { draft = "" }
+    { uiState =
+        EnteringText
+            { draft = SaveAble.new
+            , error = Nothing
+            }
     , styles =
-        { plain =
-            Css.mixin
-                [ Css.property "white-space" "pre-line"
-                , Css.property "word-wrap" "break-word"
-                ]
+        { plain = Styles.preserveWhiteSpace
         }
     }
         |> update NoOp
@@ -49,7 +50,7 @@ init flags =
 
 type Msg
     = NoOp
-    | DraftEnteringMsg DraftEntering.Msg
+    | DraftMsg Draft.Msg
 
 
 update : Msg -> Model a -> ( Model a, Cmd Msg )
@@ -58,13 +59,13 @@ update msg model =
         NoOp ->
             model ! []
 
-        DraftEnteringMsg draftMsg ->
+        DraftMsg draftMsg ->
             case model.uiState of
                 EnteringText data ->
-                    DraftEntering.update draftMsg data
+                    Draft.update draftMsg data
                         |> (\( newData, cmds ) ->
                                 ( { model | uiState = EnteringText newData }
-                                , Cmd.map DraftEnteringMsg cmds
+                                , Cmd.map DraftMsg cmds
                                 )
                            )
 
@@ -78,11 +79,14 @@ view model =
             case model.uiState of
                 EnteringText data ->
                     [ viewSection "CONTROLS SECTION" <|
-                        Html.map DraftEnteringMsg <|
-                            DraftEntering.view data
+                        Html.map DraftMsg <|
+                            Draft.view data
                     , viewSection "OUTPUT SECTION" <|
                         Output.view
-                            { draft = [ ( data.draft, .plain ) ]
+                            { draft =
+                                SaveAble.map (\draft -> [ ( draft, .plain ) ]) data.draft
+                                    |> SaveAble.toMaybe
+                                    |> Maybe.withDefault []
                             , styles = model.styles
                             }
                     ]

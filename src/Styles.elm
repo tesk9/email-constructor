@@ -1,4 +1,4 @@
-module Styles exposing (css, CssClasses(..), class, classList, id)
+module Styles exposing (css, CssClasses(..), class, classList, id, preserveWhiteSpace)
 
 import Colors exposing (..)
 import Css exposing (..)
@@ -42,6 +42,14 @@ inputFocus =
         ]
 
 
+preserveWhiteSpace : Mixin
+preserveWhiteSpace =
+    mixin
+        [ property "white-space" "pre-line"
+        , property "word-wrap" "break-word"
+        ]
+
+
 type CssClasses
     = Page
     | PageHeader
@@ -49,32 +57,55 @@ type CssClasses
     | SectionContainer
     | SectionHeader
     | OutputContainer
+    | PreserveWhiteSpace
 
 
 styles : List Snippet
 styles =
     [ (.) Page
-        [ fontFamily sansSerif
-        , boxSizing borderBox
-        , color blue4
+        [ backgroundColor blue0
+        , descendants
+            [ everything
+                [ fontFamily sansSerif
+                , boxSizing borderBox
+                , color blue4
+                ]
+            ]
         ]
     , (.)
         PageHeader
-        [ textAlign center ]
+        [ textAlign center
+        , marginTop zero
+        , paddingTop (px 8)
+        , color blue1
+        ]
     , (.) Container
         [ displayFlex
         , property "justify-content" "space-around"
         ]
     , (.) SectionContainer
-        [ minWidth (px 400) ]
+        [ minWidth (px 400)
+        , padding (px 16)
+        , firstChild
+            [ backgroundColor clay0
+            , color clay4
+            ]
+        , lastChild
+            [ backgroundColor mustard0
+            , color mustard4
+            ]
+        ]
     , (.) SectionHeader
         []
     , (.) OutputContainer
-        [ width (px 600)
+        [ property "width" "60vw"
         , property "min-height" "70vh"
-        , border3 (px 2) dashed clay2
+        , border3 (px 2) solid mustard2
         , padding (px 8)
+        , backgroundColor white
         ]
+    , (.) PreserveWhiteSpace
+        [ preserveWhiteSpace ]
     ]
 
 

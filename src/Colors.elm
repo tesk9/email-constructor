@@ -3,6 +3,11 @@ module Colors exposing (..)
 import Css exposing (..)
 
 
+white : Css.Color
+white =
+    hex "#fff"
+
+
 blue0 : Css.Color
 blue0 =
     hex "#343477"
@@ -53,8 +58,8 @@ mustard4 =
     hex "#282500"
 
 
-colorSecondary20 : Css.Color
-colorSecondary20 =
+clay0 : Css.Color
+clay0 =
     hex "#AA7939"
 
 
