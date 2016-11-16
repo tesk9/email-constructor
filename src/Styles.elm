@@ -114,7 +114,6 @@ styles =
         , preserveWhiteSpace
         , fontSize (px 12)
         , color blue4
-        , backgroundColor blue1
         , padding (px 4)
         ]
     ]
