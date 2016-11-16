@@ -22,12 +22,16 @@ type alias Flags =
 
 
 type alias Model =
-    {}
+    { uiState : UiState }
+
+
+type UiState
+    = EnteringText
 
 
 init : Flags -> ( Model, Cmd Msg )
 init flags =
-    flags
+    { uiState = EnteringText }
         |> update NoOp
 
 
@@ -49,7 +53,10 @@ view model =
         , h1 [ Styles.class [ Styles.PageHeader ] ] [ text "Email Constructor" ]
         , div
             [ Styles.class [ Styles.Container ] ]
-            [ viewSection "CONTROLS SECTION" <| Controls.view {}
+            [ viewSection "CONTROLS SECTION" <|
+                case model.uiState of
+                    EnteringText ->
+                        Controls.view {}
             , viewSection "OUTPUT SECTION" <| Output.view {}
             ]
         ]
