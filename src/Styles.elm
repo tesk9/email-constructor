@@ -1,4 +1,4 @@
-module Styles exposing (css, CssClasses(..))
+module Styles exposing (css, CssClasses(..), class, classList, id)
 
 import Css exposing (..)
 import Css.Namespace exposing (namespace)
@@ -6,12 +6,28 @@ import Html.CssHelpers exposing (withNamespace)
 
 
 type CssClasses
-    = Container
+    = Page
+    | PageHeader
+    | Container
+    | SectionHeader
 
 
 styles : List Snippet
 styles =
-    []
+    [ (.) Page
+        [ fontFamily sansSerif
+        , boxSizing borderBox
+        ]
+    , (.)
+        PageHeader
+        [ textAlign center ]
+    , (.) Container
+        [ displayFlex
+        , property "justify-content" "space-around"
+        ]
+    , (.) SectionHeader
+        []
+    ]
 
 
 css : String
