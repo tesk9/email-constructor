@@ -15,9 +15,11 @@ defaultStyles =
         , height (px 200)
         , width (pct 100)
         , border3 (px 2) solid blue3
+        , backgroundColor mustard1
         , color blue0
         , fontFamily serif
         , inputFocus
+        , padding (px 4)
         ]
     , button
         [ borderRadius zero
@@ -57,7 +59,7 @@ type CssClasses
     | SectionContainer
     | SectionHeader
     | OutputContainer
-    | PreserveWhiteSpace
+    | SavedDraft
 
 
 styles : List Snippet
@@ -88,6 +90,7 @@ styles =
         , padding (px 16)
         , firstChild
             [ backgroundColor clay0
+            , maxWidth (px 400)
             , color clay4
             ]
         , lastChild
@@ -104,8 +107,16 @@ styles =
         , padding (px 8)
         , backgroundColor white
         ]
-    , (.) PreserveWhiteSpace
-        [ preserveWhiteSpace ]
+    , (.) SavedDraft
+        [ minHeight (px 200)
+        , border3 (px 2) solid blue3
+        , fontFamily serif
+        , preserveWhiteSpace
+        , fontSize (px 12)
+        , color blue4
+        , backgroundColor blue1
+        , padding (px 4)
+        ]
     ]
 
 

@@ -17,6 +17,7 @@ type Msg
     = NoOp
     | InputDraft String
     | SaveDraft
+    | EditDraft
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -26,7 +27,7 @@ update msg model =
             model ! []
 
         InputDraft value ->
-            { model | draft = SaveAble.draft value } ! []
+            { model | draft = SaveAble.draft value, error = Nothing } ! []
 
         SaveDraft ->
             case SaveAble.save model.draft of
@@ -35,6 +36,14 @@ update msg model =
 
                 Nothing ->
                     { model | error = Just "Please input your draft." } ! []
+
+        EditDraft ->
+            case SaveAble.edit model.draft of
+                Just editingDraft ->
+                    { model | draft = editingDraft } ! []
+
+                Nothing ->
+                    { model | error = Just "Sorry, you can't edit that." } ! []
 
 
 view : Model -> Html Msg
@@ -45,9 +54,20 @@ view model =
         viewInput (SaveAble.toMaybe model.draft) model.error
 
 
-viewSaved : Maybe String -> Html msg
+viewSaved : Maybe String -> Html Msg
 viewSaved maybeValue =
-    span [ Styles.class [ Styles.PreserveWhiteSpace ] ] [ text (Maybe.withDefault "" maybeValue) ]
+    div []
+        [ hr [] []
+        , h4 [] [ text "Writing Sample" ]
+        , div [ Styles.class [ Styles.SavedDraft ] ]
+            [ text (Maybe.withDefault "" maybeValue) ]
+        , div []
+            [ button
+                [ onClick EditDraft
+                ]
+                [ text "Edit" ]
+            ]
+        ]
 
 
 viewInput : Maybe String -> Maybe String -> Html Msg
@@ -56,7 +76,7 @@ viewInput maybeValue maybeError =
         []
         [ hr [] []
         , label []
-            [ text "Draft"
+            [ h4 [] [ text "Draft" ]
             , textarea
                 [ onInput InputDraft
                 , placeholder "Enter your draft here..."

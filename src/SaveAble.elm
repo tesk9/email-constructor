@@ -54,8 +54,8 @@ isSaved saveable =
             False
 
 
-edit : a -> SaveAble a -> Maybe (SaveAble a)
-edit value saveable =
+edit : SaveAble a -> Maybe (SaveAble a)
+edit saveable =
     case saveable of
         Empty ->
             Nothing
@@ -64,7 +64,7 @@ edit value saveable =
             Nothing
 
         Saved savedValue ->
-            EditingSaved savedValue value |> Just
+            EditingSaved savedValue savedValue |> Just
 
         EditingSaved _ _ ->
             Nothing
