@@ -36,7 +36,13 @@ type UiState
 init : Flags -> ( Model {}, Cmd Msg )
 init flags =
     { uiState = EnteringText { draft = "" }
-    , styles = { plain = Css.mixin [] }
+    , styles =
+        { plain =
+            Css.mixin
+                [ Css.property "white-space" "pre-line"
+                , Css.property "word-wrap" "break-word"
+                ]
+        }
     }
         |> update NoOp
 
@@ -85,7 +91,7 @@ view model =
 
 viewSection : String -> Html msg -> Html msg
 viewSection header contents =
-    section []
+    section [ Styles.class [ Styles.SectionContainer ] ]
         [ h2 [ Styles.class [ Styles.SectionHeader ] ] [ text header ]
         , contents
         ]

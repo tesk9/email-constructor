@@ -1,6 +1,7 @@
 module Components.Output exposing (Model, view)
 
 import Html exposing (..)
+import Styles
 import TextUp
 
 
@@ -12,4 +13,6 @@ type alias Model a =
 
 view : Model a -> Html msg
 view model =
-    TextUp.toHtml model.styles model.draft
+    div [ Styles.class [ Styles.OutputContainer ] ]
+        [ TextUp.toHtml model.styles model.draft
+        ]

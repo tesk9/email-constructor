@@ -44,7 +44,9 @@ type CssClasses
     = Page
     | PageHeader
     | Container
+    | SectionContainer
     | SectionHeader
+    | OutputContainer
 
 
 styles : List Snippet
@@ -61,8 +63,13 @@ styles =
         [ displayFlex
         , property "justify-content" "space-around"
         ]
+    , (.) SectionContainer
+        [ minWidth (px 400) ]
     , (.) SectionHeader
         []
+    , (.) OutputContainer
+        [ maxWidth (px 400)
+        ]
     ]
 
 
