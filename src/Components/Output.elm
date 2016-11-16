@@ -13,6 +13,8 @@ type alias Model a =
 
 view : Model a -> Html msg
 view model =
-    div [ Styles.class [ Styles.OutputContainer ] ]
-        [ TextUp.toHtml model.styles model.draft
+    div []
+        [ div [ Styles.class [ Styles.OutputContainer ] ]
+            [ TextUp.toHtml model.styles model.draft
+            ]
         ]

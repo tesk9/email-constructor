@@ -27,6 +27,8 @@ defaultStyles =
         , margin2 (px 4) zero
         , inputFocus
         ]
+    , hr
+        [ border3 (px 1) solid clay2 ]
     ]
 
 
@@ -68,7 +70,10 @@ styles =
     , (.) SectionHeader
         []
     , (.) OutputContainer
-        [ maxWidth (px 400)
+        [ width (px 600)
+        , property "min-height" "70vh"
+        , border3 (px 2) dashed clay2
+        , padding (px 8)
         ]
     ]
 

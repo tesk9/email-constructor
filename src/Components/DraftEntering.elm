@@ -27,7 +27,8 @@ update msg model =
 view : Model -> Html Msg
 view model =
     div []
-        [ label []
+        [ hr [] []
+        , label []
             [ text "Draft"
             , textarea
                 [ onInput InputDraft
