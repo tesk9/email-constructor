@@ -3,9 +3,45 @@ module Colors exposing (..)
 import Css exposing (..)
 
 
+{- *** Basic Colors *** -}
+
+
 white : Css.Color
 white =
     hex "#fff"
+
+
+
+{- *** Neon Colors *** -}
+
+
+neonBlue : Css.Color
+neonBlue =
+    hex "#099FFF"
+
+
+neonGreen : Css.Color
+neonGreen =
+    hex "#00FF00"
+
+
+neonPink : Css.Color
+neonPink =
+    hex "#FF00CC"
+
+
+neonRed : Css.Color
+neonRed =
+    hex "#FF3300"
+
+
+neonYellow : Css.Color
+neonYellow =
+    hex "#E6FB04"
+
+
+
+{- *** Theme Colors *** -}
 
 
 blue0 : Css.Color
@@ -84,4 +120,4 @@ clay4 =
 
 
 
---Colors from Paletton.com © 2002-2014, http://paletton.com
+--Theme Colors from Paletton.com © 2002-2014, http://paletton.com
