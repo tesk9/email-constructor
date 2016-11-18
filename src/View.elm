@@ -5,8 +5,7 @@ import Components.Highlighting as Highlighting
 import Components.Output as Output
 import Html exposing (..)
 import Html.CssHelpers
-import Html.Events exposing (..)
-import Model exposing (Model, UiState(..))
+import Model exposing (Model)
 import SaveAble
 import Styles
 import Update exposing (Msg(..))
@@ -18,42 +17,17 @@ view model =
         [ Html.CssHelpers.style Styles.css
         , h1 [ Styles.class [ Styles.PageHeader ] ] [ text "Email Constructor" ]
         , div [ Styles.class [ Styles.Container ] ] <|
-            case model.uiState of
-                EnteringText data ->
-                    [ viewSection "CONTROLS SECTION" <|
-                        Html.map DraftMsg <|
-                            Draft.view data
-                    , button [ onClick EnterHighlightingMode ] [ text "Enter highlighting mode" ]
-                    , viewSection "OUTPUT SECTION" <|
-                        Output.view
-                            { draft =
-                                SaveAble.map (\draft -> [ ( draft, .plain ) ]) data.draft
-                                    |> SaveAble.toMaybe
-                                    |> Maybe.withDefault []
-                            , styles = model.styles
-                            }
-                    ]
-
-                SelectingSegments data ->
-                    [ viewSection "CONTROLS SECTION" <|
-                        div []
-                            [ Html.map DraftMsg <|
-                                Draft.view
-                                    { draft = data.draft
-                                    , error = Nothing
-                                    }
-                            , Html.map HighlightingMsg <|
-                                Highlighting.view data
-                            ]
-                    , viewSection "OUTPUT SECTION" <|
-                        Output.view
-                            { draft =
-                                SaveAble.map (\draft -> [ ( draft, .plain ) ]) data.draft
-                                    |> SaveAble.toMaybe
-                                    |> Maybe.withDefault []
-                            , styles = model.styles
-                            }
-                    ]
+            [ viewSection "CONTROLS SECTION" <|
+                Html.map DraftMsg (Draft.view model)
+            , viewSection "OUTPUT SECTION" <|
+                Output.view
+                    { draft =
+                        SaveAble.map (\draft -> [ ( draft, .plain ) ]) model.draft
+                            |> SaveAble.toMaybe
+                            |> Maybe.withDefault []
+                    , styles = model.styles
+                    }
+            ]
         ]
 
 

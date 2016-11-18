@@ -1,4 +1,4 @@
-module Components.Highlighting exposing (Model, update, Msg(..), view)
+module Components.Highlighting exposing (Model, update, Msg(..), view, Color)
 
 import Colors
 import Css
@@ -9,9 +9,10 @@ import SaveAble
 import TextUp
 
 
-type alias Model =
-    { fragments : List ( String, Maybe Color )
-    , draft : SaveAble.SaveAble String
+type alias Model a =
+    { a
+        | fragments : List ( String, Maybe Color )
+        , draft : SaveAble.SaveAble String
     }
 
 
@@ -47,7 +48,7 @@ type Msg
     | Highlight
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
+update : Msg -> Model a -> ( Model a, Cmd Msg )
 update msg model =
     case msg of
         NoOp ->
@@ -57,7 +58,7 @@ update msg model =
             { model | fragments = model.fragments |> List.map (\( str, maybeColor ) -> ( str, Just Yellow )) } ! []
 
 
-view : Model -> Html Msg
+view : Model a -> Html Msg
 view model =
     model.fragments
         |> List.map toTextUpString

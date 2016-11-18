@@ -1,10 +1,10 @@
-module Model exposing (Flags, Model, init, UiState(..))
+module Model exposing (Flags, Model, init)
 
-import Components.Draft as Draft
 import Components.Highlighting as Highlighting
 import SaveAble
 import TextUp
 import Styles
+import UiState
 
 
 type alias Flags =
@@ -12,24 +12,19 @@ type alias Flags =
 
 
 type alias Model a =
-    { uiState : UiState
+    { uiState : UiState.UiState
     , styles : TextUp.Config a
+    , draft : SaveAble.SaveAble String
+    , fragments : List ( String, Maybe Highlighting.Color )
+    , error : Maybe String
     }
-
-
-type UiState
-    = EnteringText Draft.Model
-    | SelectingSegments Highlighting.Model
 
 
 init : Flags -> Model {}
 init flags =
-    { uiState =
-        EnteringText
-            { draft = SaveAble.new
-            , error = Nothing
-            }
-    , styles =
-        { plain = Styles.preserveWhiteSpace
-        }
+    { uiState = UiState.EnteringText
+    , styles = { plain = Styles.preserveWhiteSpace }
+    , draft = SaveAble.new
+    , fragments = []
+    , error = Nothing
     }

@@ -2,13 +2,12 @@ module Update exposing (Msg(..), update)
 
 import Components.Draft as Draft
 import Components.Highlighting as Highlighting
-import Model exposing (Model, UiState(..))
-import SaveAble
+import Model exposing (Model)
+import Utils exposing (tuple2)
 
 
 type Msg
     = NoOp
-    | EnterHighlightingMode
     | DraftMsg Draft.Msg
     | HighlightingMsg Highlighting.Msg
 
@@ -19,47 +18,10 @@ update msg model =
         NoOp ->
             model ! []
 
-        EnterHighlightingMode ->
-            case model.uiState of
-                EnteringText data ->
-                    { model
-                        | uiState =
-                            SelectingSegments
-                                { fragments =
-                                    ( Maybe.withDefault "" (SaveAble.toMaybe data.draft)
-                                    , Nothing
-                                    )
-                                        :: []
-                                , draft = data.draft
-                                }
-                    }
-                        ! []
-
-                SelectingSegments data ->
-                    Debug.crash "Cannot advance beyond this step; todo: handle better."
-
         DraftMsg draftMsg ->
-            case model.uiState of
-                EnteringText data ->
-                    Draft.update draftMsg data
-                        |> (\( newData, cmds ) ->
-                                ( { model | uiState = EnteringText newData }
-                                , Cmd.map DraftMsg cmds
-                                )
-                           )
-
-                _ ->
-                    model ! []
+            Draft.update draftMsg model
+                |> tuple2 (Cmd.map DraftMsg)
 
         HighlightingMsg highlightingMsg ->
-            case model.uiState of
-                SelectingSegments data ->
-                    Highlighting.update highlightingMsg data
-                        |> (\( newData, cmds ) ->
-                                ( { model | uiState = SelectingSegments newData }
-                                , Cmd.map HighlightingMsg cmds
-                                )
-                           )
-
-                _ ->
-                    model ! []
+            Highlighting.update highlightingMsg model
+                |> tuple2 (Cmd.map HighlightingMsg)

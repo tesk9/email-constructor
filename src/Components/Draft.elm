@@ -5,11 +5,14 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import SaveAble
 import Styles
+import UiState
 
 
-type alias Model =
-    { draft : SaveAble.SaveAble String
-    , error : Maybe String
+type alias Model a =
+    { a
+        | draft : SaveAble.SaveAble String
+        , error : Maybe String
+        , uiState : UiState.UiState
     }
 
 
@@ -20,7 +23,7 @@ type Msg
     | EditDraft
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
+update : Msg -> Model a -> ( Model a, Cmd Msg )
 update msg model =
     case msg of
         NoOp ->
@@ -32,7 +35,7 @@ update msg model =
         SaveDraft ->
             case SaveAble.save model.draft of
                 Just savedDraft ->
-                    { model | draft = savedDraft } ! []
+                    { model | draft = savedDraft, uiState = UiState.SelectingSegments } ! []
 
                 Nothing ->
                     { model | error = Just "Please input your draft." } ! []
@@ -46,21 +49,21 @@ update msg model =
                     { model | error = Just "Sorry, you can't edit that." } ! []
 
 
-view : Model -> Html Msg
+view : Model a -> Html Msg
 view model =
     if SaveAble.isSaved model.draft then
-        viewSaved (SaveAble.toMaybe model.draft)
+        viewSaved ((SaveAble.toMaybe >> Maybe.withDefault "") model.draft)
     else
         viewInput (SaveAble.toMaybe model.draft) model.error
 
 
-viewSaved : Maybe String -> Html Msg
-viewSaved maybeValue =
-    div []
+viewSaved : String -> Html Msg
+viewSaved value =
+    div [] <|
         [ hr [] []
         , h4 [] [ text "Writing Sample" ]
         , div [ Styles.class [ Styles.SavedDraft ] ]
-            [ text (Maybe.withDefault "" maybeValue) ]
+            [ text value ]
         , div []
             [ button
                 [ onClick EditDraft
