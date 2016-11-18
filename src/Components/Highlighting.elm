@@ -3,12 +3,15 @@ module Components.Highlighting exposing (Model, update, Msg(..), view)
 import Colors
 import Css
 import Html exposing (..)
+import Html.Events exposing (..)
 import Styles
+import SaveAble
 import TextUp
 
 
 type alias Model =
     { fragments : List ( String, Maybe Color )
+    , draft : SaveAble.SaveAble String
     }
 
 
@@ -41,6 +44,7 @@ toTextUpString ( str, maybeColor ) =
 
 type Msg
     = NoOp
+    | Highlight
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -49,9 +53,13 @@ update msg model =
         NoOp ->
             model ! []
 
+        Highlight ->
+            { model | fragments = model.fragments |> List.map (\( str, maybeColor ) -> ( str, Just Yellow )) } ! []
+
 
 view : Model -> Html Msg
 view model =
     model.fragments
         |> List.map toTextUpString
         |> TextUp.toHtml highlightStyles
+        |> \fragments -> span [ onClick Highlight ] [ fragments ]

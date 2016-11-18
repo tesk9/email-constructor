@@ -1,6 +1,7 @@
 module Model exposing (Flags, Model, init, UiState(..))
 
 import Components.Draft as Draft
+import Components.Highlighting as Highlighting
 import SaveAble
 import TextUp
 import Styles
@@ -18,6 +19,7 @@ type alias Model a =
 
 type UiState
     = EnteringText Draft.Model
+    | SelectingSegments Highlighting.Model
 
 
 init : Flags -> Model {}
