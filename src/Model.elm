@@ -15,7 +15,7 @@ type alias Model a =
     { uiState : UiState.UiState
     , styles : TextUp.Config a
     , draft : SaveAble.SaveAble String
-    , fragments : List ( String, Maybe Highlighting.Color )
+    , fragments : SaveAble.SaveAble (List ( String, Maybe Highlighting.Color ))
     , error : Maybe String
     }
 
@@ -25,6 +25,6 @@ init flags =
     { uiState = UiState.EnteringText
     , styles = { plain = Styles.preserveWhiteSpace }
     , draft = SaveAble.new
-    , fragments = []
+    , fragments = SaveAble.new
     , error = Nothing
     }

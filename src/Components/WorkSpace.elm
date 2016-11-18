@@ -23,7 +23,9 @@ view model =
                     |> Html.map Update.DraftMsg
 
         UiState.SelectingSegments ->
-            Highlighting.view model
+            SaveAble.toMaybe model.fragments
+                |> Maybe.withDefault []
+                |> Highlighting.view
                 |> Html.map Update.HighlightingMsg
 
 

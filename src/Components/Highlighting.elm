@@ -4,13 +4,14 @@ import Colors
 import Css
 import Html exposing (..)
 import Html.Events exposing (..)
+import SaveAble
 import Styles
 import TextUp
 
 
 type alias Model a =
     { a
-        | fragments : List ( String, Maybe Color )
+        | fragments : SaveAble.SaveAble (List ( String, Maybe Color ))
     }
 
 
@@ -53,12 +54,21 @@ update msg model =
             model ! []
 
         Highlight ->
-            { model | fragments = model.fragments |> List.map (\( str, maybeColor ) -> ( str, Just Yellow )) } ! []
+            --TODO: actual logic on this highlighting
+            { model
+                | fragments =
+                    SaveAble.map
+                        (\fragments ->
+                            List.map (\( str, maybeColor ) -> ( str, Just Yellow )) fragments
+                        )
+                        model.fragments
+            }
+                ! []
 
 
-view : Model a -> Html Msg
-view model =
-    model.fragments
+view : List ( String, Maybe Color ) -> Html Msg
+view fragments =
+    fragments
         |> List.map toTextUpString
         |> TextUp.toHtml highlightStyles
         |> \fragments -> span [ onClick Highlight ] [ fragments ]

@@ -5,6 +5,7 @@ module SaveAble
         , draft
         , save
         , isSaved
+        , wasEverSaved
         , edit
         , map
         , toMaybe
@@ -48,6 +49,19 @@ isSaved : SaveAble a -> Bool
 isSaved saveable =
     case saveable of
         Saved value ->
+            True
+
+        _ ->
+            False
+
+
+wasEverSaved : SaveAble a -> Bool
+wasEverSaved saveable =
+    case saveable of
+        Saved _ ->
+            True
+
+        EditingSaved _ _ ->
             True
 
         _ ->
