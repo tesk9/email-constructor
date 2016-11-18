@@ -1,13 +1,15 @@
 module Update exposing (Msg(..), update)
 
-import Components.Draft as Draft
+import Components.DraftEntering as Draft
 import Components.Highlighting as Highlighting
 import Model exposing (Model)
+import UiState
 import Utils exposing (tuple2)
 
 
 type Msg
     = NoOp
+    | EnterHighlighterMode
     | DraftMsg Draft.Msg
     | HighlightingMsg Highlighting.Msg
 
@@ -17,6 +19,9 @@ update msg model =
     case msg of
         NoOp ->
             model ! []
+
+        EnterHighlighterMode ->
+            { model | uiState = UiState.SelectingSegments } ! []
 
         DraftMsg draftMsg ->
             Draft.update draftMsg model

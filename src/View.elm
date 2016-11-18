@@ -1,10 +1,11 @@
 module View exposing (view)
 
-import Components.Draft as Draft
-import Components.Highlighting as Highlighting
+import Components.WorkSpace as WorkSpace
 import Components.Output as Output
 import Html exposing (..)
+import Html.Attributes exposing (..)
 import Html.CssHelpers
+import Html.Events exposing (onClick)
 import Model exposing (Model)
 import SaveAble
 import Styles
@@ -17,8 +18,8 @@ view model =
         [ Html.CssHelpers.style Styles.css
         , h1 [ Styles.class [ Styles.PageHeader ] ] [ text "Email Constructor" ]
         , div [ Styles.class [ Styles.Container ] ] <|
-            [ viewSection "CONTROLS SECTION" <|
-                Html.map DraftMsg (Draft.view model)
+            [ viewSection "WorkSpace" <|
+                WorkSpace.view model
             , viewSection "OUTPUT SECTION" <|
                 Output.view
                     { draft =

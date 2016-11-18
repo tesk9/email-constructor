@@ -5,14 +5,12 @@ import Css
 import Html exposing (..)
 import Html.Events exposing (..)
 import Styles
-import SaveAble
 import TextUp
 
 
 type alias Model a =
     { a
         | fragments : List ( String, Maybe Color )
-        , draft : SaveAble.SaveAble String
     }
 
 
