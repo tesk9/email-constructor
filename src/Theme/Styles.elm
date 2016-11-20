@@ -16,6 +16,7 @@ type CssClasses
     | SectionHeader
     | OutputContainer
     | SavedDraft
+    | HighlightingBox
 
 
 styles : List Snippet
@@ -64,6 +65,9 @@ styles =
         , fontSize (px 12)
         , color blue4
         , padding (px 4)
+        ]
+    , (.) HighlightingBox
+        [ editingBox
         ]
     ]
 

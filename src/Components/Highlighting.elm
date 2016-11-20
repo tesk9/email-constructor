@@ -7,6 +7,7 @@ import Html.Events exposing (..)
 import TextUp
 import Theme.Colors as Colors
 import Theme.Mixins as Mixins
+import Theme.Styles as Styles
 
 
 type alias Model a =
@@ -68,7 +69,20 @@ update msg model =
 
 view : List ( String, Maybe Color ) -> Html Msg
 view fragments =
-    fragments
-        |> List.map toTextUpString
-        |> TextUp.toHtml highlightStyles
-        |> \fragments -> span [ onClick Highlight ] [ fragments ]
+    div []
+        [ hr [] []
+        , h4 [] [ text "Highlighting" ]
+        , viewFragments fragments
+        ]
+
+
+viewFragments : List ( String, Maybe Color ) -> Html Msg
+viewFragments fragments =
+    div [ Styles.class [ Styles.HighlightingBox ] ] <|
+        List.map viewFragment fragments
+
+
+viewFragment : ( String, Maybe Color ) -> Html Msg
+viewFragment fragment =
+    span [ onClick Highlight ]
+        [ TextUp.toHtml highlightStyles [ toTextUpString fragment ] ]
