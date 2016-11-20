@@ -1,55 +1,11 @@
-module Theme.Styles exposing (css, CssClasses(..), class, classList, id, preserveWhiteSpace)
+module Theme.Styles exposing (css, CssClasses(..), class, classList, id)
 
 import Css exposing (..)
-import Css.Elements exposing (..)
 import Css.Namespace exposing (namespace)
 import Html.CssHelpers exposing (withNamespace)
+import Theme.Base as Base
 import Theme.Colors as Colors exposing (..)
-
-
-defaultStyles : List Snippet
-defaultStyles =
-    [ selector "textarea"
-        [ display block
-        , property "resize" "vertical"
-        , height (px 200)
-        , width (pct 100)
-        , border3 (px 2) solid blue3
-        , backgroundColor mustard1
-        , color blue0
-        , fontFamily serif
-        , inputFocus
-        , padding (px 4)
-        ]
-    , button
-        [ borderRadius zero
-        , border3 (px 2) solid blue4
-        , backgroundColor mustard1
-        , color blue4
-        , margin2 (px 4) zero
-        , inputFocus
-        ]
-    , hr
-        [ border3 (px 1) solid clay2 ]
-    ]
-
-
-inputFocus : Mixin
-inputFocus =
-    mixin
-        [ focus
-            [ borderColor blue2
-            , outline none
-            ]
-        ]
-
-
-preserveWhiteSpace : Mixin
-preserveWhiteSpace =
-    mixin
-        [ property "white-space" "pre-line"
-        , property "word-wrap" "break-word"
-        ]
+import Theme.Mixins as Mixins exposing (..)
 
 
 type CssClasses
@@ -66,13 +22,6 @@ styles : List Snippet
 styles =
     [ (.) Page
         [ backgroundColor blue0
-        , descendants
-            [ everything
-                [ fontFamily sansSerif
-                , boxSizing borderBox
-                , color blue4
-                ]
-            ]
         ]
     , (.)
         PageHeader
@@ -121,7 +70,7 @@ styles =
 
 css : String
 css =
-    (defaultStyles ++ styles)
+    (Base.styles ++ styles)
         |> namespace currentNamespace.name
         |> stylesheet
         |> (\stylesheet -> [ stylesheet ])

@@ -4,7 +4,7 @@ import Components.Highlighting as Highlighting
 import Data.SaveAble as SaveAble
 import Data.UiState as UiState
 import TextUp
-import Theme.Styles as Styles
+import Theme.Mixins as Mixins
 
 
 type alias Flags =
@@ -23,7 +23,7 @@ type alias Model a =
 init : Flags -> Model {}
 init flags =
     { uiState = UiState.EnteringText
-    , styles = { plain = Styles.preserveWhiteSpace }
+    , styles = { plain = Mixins.preserveWhiteSpace }
     , draft = SaveAble.new
     , fragments = SaveAble.new
     , error = Nothing

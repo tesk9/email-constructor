@@ -6,7 +6,7 @@ import Html exposing (..)
 import Html.Events exposing (..)
 import TextUp
 import Theme.Colors as Colors
-import Theme.Styles as Styles
+import Theme.Mixins as Mixins
 
 
 type alias Model a =
@@ -26,7 +26,7 @@ type alias HighlightStyles =
 
 highlightStyles : TextUp.Config HighlightStyles
 highlightStyles =
-    { plain = Styles.preserveWhiteSpace
+    { plain = Mixins.preserveWhiteSpace
     , yellow = Css.mixin [ Css.backgroundColor Colors.neonYellow ]
     }
 
