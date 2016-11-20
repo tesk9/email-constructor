@@ -8,19 +8,21 @@ import Html.Events exposing (..)
 import TextUp
 import Theme.Styles as Styles
 import Utils.Utils as Utils
-import Utils.ViewUtils as ViewUtils exposing (radio)
+import Utils.ViewUtils as ViewUtils exposing (radio, onChange)
 
 
 type alias Model a =
     { a
         | fragments : List ( Int, String )
         , highlightedFragments : Dict.Dict Int Color
+        , highlighterColor : Color
     }
 
 
 type Msg
     = NoOp
-    | Highlight Int
+    | Highlight Int Color
+    | SetHighlighterColor Color
 
 
 update : Msg -> Model a -> ( Model a, Cmd Msg )
@@ -29,16 +31,19 @@ update msg model =
         NoOp ->
             model ! []
 
-        Highlight index ->
+        Highlight index color ->
             { model
                 | highlightedFragments =
-                    Utils.dictToggleOrReplace index Yellow model.highlightedFragments
+                    Utils.dictToggleOrReplace index color model.highlightedFragments
             }
                 ! []
 
+        SetHighlighterColor color ->
+            { model | highlighterColor = color } ! []
 
-view : Color -> Model a -> Html Msg
-view highlighterColor model =
+
+view : Model a -> Html Msg
+view model =
     div []
         [ hr [] []
         , h4 [] [ text "Highlighting" ]
@@ -50,20 +55,20 @@ view highlighterColor model =
                     , color = Dict.get id model.highlightedFragments
                     }
                 )
-            |> viewFragments
-        , viewHighlighterColorSelector highlighterColor
+            |> viewFragments model.highlighterColor
+        , viewHighlighterColorSelector model.highlighterColor
         ]
 
 
-viewFragments : List { a | id : Int, content : String, color : Maybe Color } -> Html Msg
-viewFragments fragments =
+viewFragments : Color -> List { a | id : Int, content : String, color : Maybe Color } -> Html Msg
+viewFragments color fragments =
     div [ Styles.class [ Styles.HighlightingBox ] ] <|
-        List.map viewFragment fragments
+        List.map (viewFragment color) fragments
 
 
-viewFragment : { a | id : Int, content : String, color : Maybe Color } -> Html Msg
-viewFragment fragment =
-    span [ onClick (Highlight fragment.id) ]
+viewFragment : Color -> { a | id : Int, content : String, color : Maybe Color } -> Html Msg
+viewFragment color fragment =
+    span [ onClick (Highlight fragment.id color) ]
         [ TextUp.toHtml highlightStyles [ toTextUpString ( fragment.content, fragment.color ) ] ]
 
 
@@ -87,6 +92,7 @@ viewHighlighterColorRadio selectedColor color =
                 [ selected (selectedColor == color)
                 , id id_
                 , name "highlighting color"
+                , onChange (\_ -> SetHighlighterColor color)
                 ]
                 []
             ]

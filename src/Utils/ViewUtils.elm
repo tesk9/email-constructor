@@ -2,6 +2,8 @@ module Utils.ViewUtils exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Html.Events exposing (on, targetValue)
+import Json.Decode
 
 
 tuple2 : (b -> c) -> ( a, b ) -> ( a, c )
@@ -22,3 +24,8 @@ radio attributes children =
     input
         (type_ "radio" :: attributes)
         children
+
+
+onChange : (String -> msg) -> Html.Attribute msg
+onChange msg =
+    on "change" (Json.Decode.map msg targetValue)

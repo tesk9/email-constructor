@@ -25,8 +25,7 @@ update msg model =
 
         EnterHighlighterMode ->
             { model
-                | uiState =
-                    UiState.SelectingSegments Highlighter.Yellow
+                | uiState = UiState.SelectingSegments
                 , fragments =
                     model.draft
                         |> SaveAble.toMaybe

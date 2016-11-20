@@ -18,6 +18,7 @@ type alias Model a =
     , draft : SaveAble.SaveAble String
     , fragments : List ( Int, String )
     , highlightedFragments : Dict.Dict Int Highlighter.Color
+    , highlighterColor : Highlighter.Color
     , error : Maybe String
     }
 
@@ -29,5 +30,6 @@ init flags =
     , draft = SaveAble.new
     , fragments = []
     , highlightedFragments = Dict.empty
+    , highlighterColor = Highlighter.Yellow
     , error = Nothing
     }

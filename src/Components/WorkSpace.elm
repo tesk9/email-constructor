@@ -22,9 +22,9 @@ view model =
                 DraftEntering.view (SaveAble.toMaybe model.draft) model.error
                     |> Html.map Update.DraftMsg
 
-        UiState.SelectingSegments highlighterColor ->
+        UiState.SelectingSegments ->
             model
-                |> Highlighting.view highlighterColor
+                |> Highlighting.view
                 |> Html.map Update.HighlightingMsg
 
 
