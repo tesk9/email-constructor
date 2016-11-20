@@ -1,18 +1,20 @@
 module Components.Highlighting exposing (Model, update, Msg(..), view, Color)
 
 import Css
-import Data.SaveAble as SaveAble
+import Dict
 import Html exposing (..)
 import Html.Events exposing (..)
 import TextUp
 import Theme.Colors as Colors
 import Theme.Mixins as Mixins
 import Theme.Styles as Styles
+import Utils.Utils as Utils
 
 
 type alias Model a =
     { a
-        | fragments : SaveAble.SaveAble (List ( String, Maybe Color ))
+        | fragments : List ( Int, String )
+        , highlightedFragments : Dict.Dict Int Color
     }
 
 
@@ -45,7 +47,7 @@ toTextUpString ( str, maybeColor ) =
 
 type Msg
     = NoOp
-    | Highlight
+    | Highlight Int
 
 
 update : Msg -> Model a -> ( Model a, Cmd Msg )
@@ -54,20 +56,15 @@ update msg model =
         NoOp ->
             model ! []
 
-        Highlight ->
-            --TODO: actual logic on this highlighting
+        Highlight index ->
             { model
-                | fragments =
-                    SaveAble.map
-                        (\fragments ->
-                            List.map (\( str, maybeColor ) -> ( str, Just Yellow )) fragments
-                        )
-                        model.fragments
+                | highlightedFragments =
+                    Utils.dictToggleOrReplace index Yellow model.highlightedFragments
             }
                 ! []
 
 
-view : List ( String, Maybe Color ) -> Html Msg
+view : List { a | id : Int, content : String, color : Maybe Color } -> Html Msg
 view fragments =
     div []
         [ hr [] []
@@ -76,13 +73,13 @@ view fragments =
         ]
 
 
-viewFragments : List ( String, Maybe Color ) -> Html Msg
+viewFragments : List { a | id : Int, content : String, color : Maybe Color } -> Html Msg
 viewFragments fragments =
     div [ Styles.class [ Styles.HighlightingBox ] ] <|
         List.map viewFragment fragments
 
 
-viewFragment : ( String, Maybe Color ) -> Html Msg
+viewFragment : { a | id : Int, content : String, color : Maybe Color } -> Html Msg
 viewFragment fragment =
-    span [ onClick Highlight ]
-        [ TextUp.toHtml highlightStyles [ toTextUpString fragment ] ]
+    span [ onClick (Highlight fragment.id) ]
+        [ TextUp.toHtml highlightStyles [ toTextUpString ( fragment.content, fragment.color ) ] ]

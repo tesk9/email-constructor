@@ -24,21 +24,17 @@ update msg model =
 
         EnterHighlighterMode ->
             { model
-                | uiState = UiState.SelectingSegments
+                | uiState =
+                    UiState.SelectingSegments
                 , fragments =
-                    if SaveAble.wasEverSaved model.fragments then
-                        model.fragments
-                    else
-                        model.draft
-                            |> SaveAble.toMaybe
-                            |> Maybe.map
-                                (\draft ->
-                                    String.words draft
-                                        |> List.intersperse " "
-                                        |> List.map (flip (,) Nothing)
-                                        |> SaveAble.draft
-                                )
-                            |> Maybe.withDefault model.fragments
+                    model.draft
+                        |> SaveAble.toMaybe
+                        |> Maybe.map
+                            (String.words
+                                >> List.intersperse " "
+                                >> List.indexedMap (,)
+                            )
+                        |> Maybe.withDefault []
             }
                 ! []
 
