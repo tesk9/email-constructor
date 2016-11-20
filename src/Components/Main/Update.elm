@@ -1,12 +1,12 @@
-module Update exposing (Msg(..), update)
+module Components.Main.Update exposing (Msg(..), update)
 
 import Components.DraftEntering as Draft
 import Components.Highlighting as Highlighting
-import Model exposing (Model)
-import SaveAble
+import Components.Main.Model as Model exposing (Model)
+import Data.SaveAble as SaveAble
+import Data.UiState as UiState
 import String
-import UiState
-import Utils exposing (tuple2)
+import Utils.ViewUtils exposing (tuple2)
 
 
 type Msg

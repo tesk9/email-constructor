@@ -1,9 +1,9 @@
 module Main exposing (main)
 
+import Components.Main.Model as Model exposing (Model)
+import Components.Main.Update as Update exposing (update)
+import Components.Main.View as View exposing (view)
 import Html
-import Model exposing (Model)
-import Update exposing (update)
-import View exposing (view)
 
 
 main : Program Model.Flags (Model {}) Update.Msg

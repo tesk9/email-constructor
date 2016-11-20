@@ -1,4 +1,4 @@
-module Utils exposing (..)
+module Utils.ViewUtils exposing (..)
 
 import Html
 

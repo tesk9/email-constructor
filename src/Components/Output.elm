@@ -1,8 +1,8 @@
 module Components.Output exposing (Model, view)
 
 import Html exposing (..)
-import Styles
 import TextUp
+import Theme.Styles as Styles
 
 
 type alias Model a =

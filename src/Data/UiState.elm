@@ -1,4 +1,4 @@
-module UiState exposing (..)
+module Data.UiState exposing (..)
 
 
 type UiState

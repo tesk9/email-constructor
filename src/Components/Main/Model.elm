@@ -1,10 +1,10 @@
-module Model exposing (Flags, Model, init)
+module Components.Main.Model exposing (Flags, Model, init)
 
 import Components.Highlighting as Highlighting
-import SaveAble
+import Data.SaveAble as SaveAble
+import Data.UiState as UiState
 import TextUp
-import Styles
-import UiState
+import Theme.Styles as Styles
 
 
 type alias Flags =

@@ -2,14 +2,14 @@ module Components.WorkSpace exposing (..)
 
 import Components.DraftEntering as DraftEntering
 import Components.Highlighting as Highlighting
+import Components.Main.Model as Model exposing (Model)
+import Components.Main.Update as Update exposing (Msg)
+import Data.SaveAble as SaveAble
+import Data.UiState as UiState
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import Model exposing (Model)
-import SaveAble
-import Styles
-import UiState
-import Update exposing (Msg)
+import Theme.Styles as Styles
 
 
 view : Model a -> Html Msg

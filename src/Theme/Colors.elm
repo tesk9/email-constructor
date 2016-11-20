@@ -1,4 +1,4 @@
-module Colors exposing (..)
+module Theme.Colors exposing (..)
 
 import Css exposing (..)
 

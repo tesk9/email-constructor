@@ -1,10 +1,10 @@
-module Styles exposing (css, CssClasses(..), class, classList, id, preserveWhiteSpace)
+module Theme.Styles exposing (css, CssClasses(..), class, classList, id, preserveWhiteSpace)
 
-import Colors exposing (..)
 import Css exposing (..)
 import Css.Elements exposing (..)
 import Css.Namespace exposing (namespace)
 import Html.CssHelpers exposing (withNamespace)
+import Theme.Colors as Colors exposing (..)
 
 
 defaultStyles : List Snippet
@@ -131,8 +131,6 @@ css =
 
 { class, classList, id } =
     currentNamespace
-
-
 currentNamespace : Html.CssHelpers.Namespace String a b c
 currentNamespace =
     withNamespace "constructor-"

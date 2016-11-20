@@ -1,12 +1,12 @@
 module Components.Highlighting exposing (Model, update, Msg(..), view, Color)
 
-import Colors
 import Css
+import Data.SaveAble as SaveAble
 import Html exposing (..)
 import Html.Events exposing (..)
-import SaveAble
-import Styles
 import TextUp
+import Theme.Colors as Colors
+import Theme.Styles as Styles
 
 
 type alias Model a =

@@ -1,15 +1,13 @@
-module View exposing (view)
+module Components.Main.View exposing (view)
 
-import Components.WorkSpace as WorkSpace
+import Components.Main.Model as Model exposing (Model)
+import Components.Main.Update as Update exposing (Msg(..))
 import Components.Output as Output
+import Components.WorkSpace as WorkSpace
+import Data.SaveAble as SaveAble
 import Html exposing (..)
-import Html.Attributes exposing (..)
 import Html.CssHelpers
-import Html.Events exposing (onClick)
-import Model exposing (Model)
-import SaveAble
-import Styles
-import Update exposing (Msg(..))
+import Theme.Styles as Styles
 
 
 view : Model a -> Html Msg

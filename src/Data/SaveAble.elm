@@ -1,4 +1,4 @@
-module SaveAble
+module Data.SaveAble
     exposing
         ( SaveAble
         , new

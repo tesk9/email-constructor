@@ -1,9 +1,9 @@
 module Components.DraftEntering exposing (Model, update, Msg(..), view, viewSaveDraft, viewEditDraft)
 
+import Data.SaveAble as SaveAble
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import SaveAble
 
 
 type alias Model a =
