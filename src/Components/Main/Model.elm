@@ -1,6 +1,6 @@
 module Components.Main.Model exposing (Flags, Model, init)
 
-import Components.Highlighting as Highlighting
+import Data.HighlighterColor as Highlighter
 import Data.SaveAble as SaveAble
 import Data.UiState as UiState
 import Dict
@@ -17,7 +17,7 @@ type alias Model a =
     , styles : TextUp.Config a
     , draft : SaveAble.SaveAble String
     , fragments : List ( Int, String )
-    , highlightedFragments : Dict.Dict Int Highlighting.Color
+    , highlightedFragments : Dict.Dict Int Highlighter.Color
     , error : Maybe String
     }
 

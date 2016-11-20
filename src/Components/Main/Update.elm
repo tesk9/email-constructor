@@ -5,6 +5,7 @@ import Components.Highlighting as Highlighting
 import Components.Main.Model as Model exposing (Model)
 import Data.SaveAble as SaveAble
 import Data.UiState as UiState
+import Data.HighlighterColor as Highlighter
 import String
 import Utils.ViewUtils exposing (tuple2)
 
@@ -25,7 +26,7 @@ update msg model =
         EnterHighlighterMode ->
             { model
                 | uiState =
-                    UiState.SelectingSegments
+                    UiState.SelectingSegments Highlighter.Yellow
                 , fragments =
                     model.draft
                         |> SaveAble.toMaybe

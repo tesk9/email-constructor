@@ -6,7 +6,6 @@ import Components.Main.Model as Model exposing (Model)
 import Components.Main.Update as Update exposing (Msg)
 import Data.SaveAble as SaveAble
 import Data.UiState as UiState
-import Dict
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -23,16 +22,9 @@ view model =
                 DraftEntering.view (SaveAble.toMaybe model.draft) model.error
                     |> Html.map Update.DraftMsg
 
-        UiState.SelectingSegments ->
-            model.fragments
-                |> List.map
-                    (\( id, content ) ->
-                        { id = id
-                        , content = content
-                        , color = Dict.get id model.highlightedFragments
-                        }
-                    )
-                |> Highlighting.view
+        UiState.SelectingSegments highlighterColor ->
+            model
+                |> Highlighting.view highlighterColor
                 |> Html.map Update.HighlightingMsg
 
 

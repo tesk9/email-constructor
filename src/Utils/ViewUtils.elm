@@ -1,6 +1,7 @@
 module Utils.ViewUtils exposing (..)
 
-import Html
+import Html exposing (..)
+import Html.Attributes exposing (..)
 
 
 tuple2 : (b -> c) -> ( a, b ) -> ( a, c )
@@ -13,4 +14,11 @@ viewIf predicate view =
     if predicate then
         view
     else
-        Html.text ""
+        text ""
+
+
+radio : List (Attribute msg) -> List (Html msg) -> Html msg
+radio attributes children =
+    input
+        (type_ "radio" :: attributes)
+        children
