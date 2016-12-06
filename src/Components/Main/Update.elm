@@ -3,9 +3,9 @@ module Components.Main.Update exposing (Msg(..), update)
 import Components.DraftEntering as Draft
 import Components.Highlighting as Highlighting
 import Components.Main.Model as Model exposing (Model)
+import Components.SegmentStyling as SegmentStyling
 import Data.SaveAble as SaveAble
 import Data.UiState as UiState
-import Data.HighlighterColor as Highlighter
 import String
 import Utils.ViewUtils exposing (tuple2)
 
@@ -13,8 +13,10 @@ import Utils.ViewUtils exposing (tuple2)
 type Msg
     = NoOp
     | EnterHighlighterMode
+    | ExitHighlighterMode
     | DraftMsg Draft.Msg
     | HighlightingMsg Highlighting.Msg
+    | SegmentStylingMsg SegmentStyling.Msg
 
 
 update : Msg -> Model a -> ( Model a, Cmd Msg )
@@ -38,6 +40,9 @@ update msg model =
             }
                 ! []
 
+        ExitHighlighterMode ->
+            { model | uiState = UiState.SetSegmentStyles } ! []
+
         DraftMsg draftMsg ->
             Draft.update draftMsg model
                 |> tuple2 (Cmd.map DraftMsg)
@@ -45,3 +50,7 @@ update msg model =
         HighlightingMsg highlightingMsg ->
             Highlighting.update highlightingMsg model
                 |> tuple2 (Cmd.map HighlightingMsg)
+
+        SegmentStylingMsg segmentStylingMsg ->
+            SegmentStyling.update segmentStylingMsg model
+                |> tuple2 (Cmd.map SegmentStylingMsg)

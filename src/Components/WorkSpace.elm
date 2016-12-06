@@ -1,9 +1,10 @@
-module Components.WorkSpace exposing (..)
+module Components.WorkSpace exposing (view)
 
 import Components.DraftEntering as DraftEntering
 import Components.Highlighting as Highlighting
 import Components.Main.Model as Model exposing (Model)
 import Components.Main.Update as Update exposing (Msg)
+import Components.SegmentStyling as SegmentStyling
 import Data.SaveAble as SaveAble
 import Data.UiState as UiState
 import Html exposing (..)
@@ -23,9 +24,17 @@ view model =
                     |> Html.map Update.DraftMsg
 
         UiState.SelectingSegments ->
+            div []
+                [ model
+                    |> Highlighting.view
+                    |> Html.map Update.HighlightingMsg
+                , viewExitHighlighter
+                ]
+
+        UiState.SetSegmentStyles ->
             model
-                |> Highlighting.view
-                |> Html.map Update.HighlightingMsg
+                |> SegmentStyling.view
+                |> Html.map Update.SegmentStylingMsg
 
 
 viewSaved : String -> Html Msg
@@ -49,3 +58,9 @@ viewEnterHighlighter : Html Msg
 viewEnterHighlighter =
     button [ onClick Update.EnterHighlighterMode ]
         [ img [ alt "Highlighter Icon" ] [] ]
+
+
+viewExitHighlighter : Html Msg
+viewExitHighlighter =
+    button [ onClick Update.ExitHighlighterMode ]
+        [ text "Finish Highlighting" ]

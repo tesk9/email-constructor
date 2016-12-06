@@ -1,4 +1,4 @@
-module Components.Highlighting exposing (Model, update, Msg(..), view)
+module Components.Highlighting exposing (Model, update, Msg, view)
 
 import Data.HighlighterColor exposing (..)
 import Dict
