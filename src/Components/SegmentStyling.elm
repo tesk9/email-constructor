@@ -7,10 +7,11 @@ import TextUp
 import Theme.Styles as Styles
 
 
-type alias Model a =
+type alias Model a b =
     { a
         | fragments : List ( Int, String )
         , highlightedFragments : Dict.Dict Int Color
+        , styles : TextUp.Config b
     }
 
 
@@ -18,14 +19,14 @@ type Msg
     = NoOp
 
 
-update : Msg -> Model a -> ( Model a, Cmd Msg )
+update : Msg -> Model a b -> ( Model a b, Cmd Msg )
 update msg model =
     case msg of
         NoOp ->
             model ! []
 
 
-view : Model a -> Html Msg
+view : Model a b -> Html Msg
 view model =
     div []
         [ hr [] []
@@ -39,6 +40,7 @@ view model =
                     }
                 )
             |> viewFragments
+        , viewStylesBySelectionColor model.styles (Dict.values model.highlightedFragments)
         ]
 
 
@@ -52,3 +54,17 @@ viewFragment : { a | id : Int, content : String, color : Maybe Color } -> Html M
 viewFragment fragment =
     span []
         [ TextUp.toHtml highlightStyles [ toTextUpString ( fragment.content, fragment.color ) ] ]
+
+
+viewStylesBySelectionColor : TextUp.Config b -> List Color -> Html Msg
+viewStylesBySelectionColor styles colors =
+    ul [] <|
+        List.map (viewStyleBySelectionColor styles) colors
+
+
+viewStyleBySelectionColor : TextUp.Config b -> Color -> Html Msg
+viewStyleBySelectionColor styles color =
+    li []
+        [ h4 [] [ text <| colorToString color ]
+        , hr [] []
+        ]
