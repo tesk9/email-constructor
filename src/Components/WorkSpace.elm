@@ -48,4 +48,4 @@ viewSavedDraft value =
 viewEnterHighlighter : Html Msg
 viewEnterHighlighter =
     button [ onClick Update.EnterHighlighterMode ]
-        [ img [ alt "Pencil" ] [] ]
+        [ img [ alt "Highlighter Icon" ] [] ]
