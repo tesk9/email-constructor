@@ -17,6 +17,7 @@ type CssClasses
     | OutputContainer
     | SavedDraft
     | HighlightingBox
+    | HighlightingOptions
 
 
 styles : List Snippet
@@ -57,6 +58,7 @@ styles =
         , border3 (px 2) solid mustard2
         , padding (px 8)
         , backgroundColor white
+        , preserveWhiteSpace
         ]
     , (.) SavedDraft
         [ minHeight (px 200)
@@ -69,6 +71,10 @@ styles =
         ]
     , (.) HighlightingBox
         [ editingBox
+        ]
+    , (.) HighlightingOptions
+        [ displayFlex
+        , property "justify-content" "space-between"
         ]
     ]
 

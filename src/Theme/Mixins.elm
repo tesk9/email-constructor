@@ -16,6 +16,7 @@ editingBox =
         , color blue0
         , fontFamily serif
         , padding (px 4)
+        , preserveWhiteSpace
         ]
 
 

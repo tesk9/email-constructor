@@ -74,7 +74,7 @@ viewFragment color fragment =
 
 viewHighlighterColorSelector : Color -> Html Msg
 viewHighlighterColorSelector color =
-    Html.form [] (List.map (viewHighlighterColorRadio color) highlightColors)
+    Html.form [ Styles.class [ Styles.HighlightingOptions ] ] (List.map (viewHighlighterColorRadio color) highlightColors)
 
 
 viewHighlighterColorRadio : Color -> Color -> Html Msg
