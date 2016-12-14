@@ -4,7 +4,9 @@ import Components.Main.Model as Model exposing (Model)
 import Components.Main.Update as Update exposing (Msg(..))
 import Components.Output as Output
 import Components.WorkSpace as WorkSpace
+import Data.HighlighterColor as Highlighter
 import Data.SaveAble as SaveAble
+import Dict
 import Html exposing (..)
 import Html.CssHelpers
 import Theme.Styles as Styles
@@ -21,9 +23,19 @@ view model =
             , viewSection "OUTPUT SECTION" <|
                 Output.view
                     { draft =
-                        SaveAble.map (\draft -> [ ( draft, .plain ) ]) model.draft
-                            |> SaveAble.toMaybe
-                            |> Maybe.withDefault []
+                        if List.isEmpty model.fragments then
+                            SaveAble.map (\draft -> [ ( draft, .plain ) ]) model.draft
+                                |> SaveAble.toMaybe
+                                |> Maybe.withDefault []
+                        else
+                            List.map
+                                (\( id, content ) ->
+                                    ( content
+                                    , Highlighter.maybeColorToAccessor <|
+                                        Dict.get id model.highlightedFragments
+                                    )
+                                )
+                                model.fragments
                     , styles = model.styles
                     }
             ]
