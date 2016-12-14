@@ -6,6 +6,8 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import TextUp
 import Theme.Styles as Styles
+import Utils.Utils exposing (dictConsOrInsert)
+import Utils.ViewUtils exposing (onEnter)
 
 
 type alias Model a =
@@ -18,6 +20,7 @@ type alias Model a =
 
 type Msg
     = NoOp
+    | SetStyle String ( String, String )
 
 
 update : Msg -> Model a -> ( Model a, Cmd Msg )
@@ -25,6 +28,9 @@ update msg model =
     case msg of
         NoOp ->
             model ! []
+
+        SetStyle colorString style ->
+            { model | styles = dictConsOrInsert colorString style model.styles } ! []
 
 
 view : Model a -> Html Msg
