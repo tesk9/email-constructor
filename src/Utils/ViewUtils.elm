@@ -2,7 +2,7 @@ module Utils.ViewUtils exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (on, targetValue)
+import Html.Events exposing (on, targetValue, keyCode)
 import Json.Decode
 
 
@@ -29,3 +29,17 @@ radio attributes children =
 onChange : (String -> msg) -> Html.Attribute msg
 onChange msg =
     on "change" (Json.Decode.map msg targetValue)
+
+
+onEnter : msg -> Html.Attribute msg
+onEnter msg =
+    on "keyup"
+        (Json.Decode.andThen
+            (\key ->
+                if key == 13 then
+                    Json.Decode.succeed msg
+                else
+                    Json.Decode.fail "Not the enter key"
+            )
+            keyCode
+        )
