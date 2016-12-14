@@ -74,20 +74,41 @@ viewStyleBySelectionColor styles maybeColor =
     in
         li []
             [ h5 [] [ text colorString ]
-            , viewStyleInputs <| Maybe.withDefault [] <| Dict.get colorString styles
+            , viewStyleInputs colorString <| Maybe.withDefault [] <| Dict.get colorString styles
             , hr [] []
             ]
 
 
-viewStyleInputs : List ( String, String ) -> Html msg
-viewStyleInputs styles =
+viewStyleInputs : String -> List ( String, String ) -> Html msg
+viewStyleInputs colorString styles =
     ul [] <|
-        List.map viewStyleInput styles
+        viewStyleInput (colorString ++ "new") ( "", "" )
+            :: List.indexedMap
+                (\id styleTuple ->
+                    viewStyleInput (colorString ++ toString id) styleTuple
+                )
+                styles
 
 
-viewStyleInput : ( String, String ) -> Html msg
-viewStyleInput ( property, val ) =
+viewStyleInput : String -> ( String, String ) -> Html msg
+viewStyleInput idBase ( property, val ) =
     li []
-        [ input [ value property ] []
-        , input [ value val ] []
+        [ label
+            [ for ("input-" ++ idBase ++ "-property") ]
+            [ text "Property" ]
+        , input
+            [ id ("input-" ++ idBase ++ "-property")
+            , value property
+            , placeholder "font-family"
+            ]
+            []
+        , label
+            [ for ("input-" ++ idBase ++ "-value") ]
+            [ text "Value" ]
+        , input
+            [ id ("input-" ++ idBase ++ "-value")
+            , value val
+            , placeholder "fantasy"
+            ]
+            []
         ]
