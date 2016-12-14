@@ -19,7 +19,7 @@ type Msg
     | SegmentStylingMsg SegmentStyling.Msg
 
 
-update : Msg -> Model a -> ( Model a, Cmd Msg )
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         NoOp ->

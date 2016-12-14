@@ -10,7 +10,7 @@ import Html.CssHelpers
 import Theme.Styles as Styles
 
 
-view : Model a -> Html Msg
+view : Model -> Html Msg
 view model =
     div [ Styles.class [ Styles.Page ] ]
         [ Html.CssHelpers.style Styles.css

@@ -6,7 +6,7 @@ import Components.Main.View as View exposing (view)
 import Html
 
 
-main : Program Model.Flags (Model {}) Update.Msg
+main : Program Model.Flags Model Update.Msg
 main =
     Html.programWithFlags
         { update = update

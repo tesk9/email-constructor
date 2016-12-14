@@ -13,7 +13,7 @@ import Html.Events exposing (..)
 import Theme.Styles as Styles
 
 
-view : Model a -> Html Msg
+view : Model -> Html Msg
 view model =
     case model.uiState of
         UiState.EnteringText ->

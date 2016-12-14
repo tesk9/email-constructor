@@ -3,15 +3,16 @@ module Components.SegmentStyling exposing (Model, view, update, Msg)
 import Data.HighlighterColor exposing (..)
 import Dict
 import Html exposing (..)
+import Html.Attributes exposing (..)
 import TextUp
 import Theme.Styles as Styles
 
 
-type alias Model a b =
+type alias Model a =
     { a
         | fragments : List ( Int, String )
         , highlightedFragments : Dict.Dict Int Color
-        , styles : TextUp.Config b
+        , styles : Dict.Dict String (List ( String, String ))
     }
 
 
@@ -19,14 +20,14 @@ type Msg
     = NoOp
 
 
-update : Msg -> Model a b -> ( Model a b, Cmd Msg )
+update : Msg -> Model a -> ( Model a, Cmd Msg )
 update msg model =
     case msg of
         NoOp ->
             model ! []
 
 
-view : Model a b -> Html Msg
+view : Model a -> Html Msg
 view model =
     div []
         [ hr [] []
@@ -56,15 +57,37 @@ viewFragment fragment =
         [ TextUp.toHtml highlightStyles [ toTextUpString ( fragment.content, fragment.color ) ] ]
 
 
-viewStylesBySelectionColor : TextUp.Config b -> List Color -> Html Msg
+viewStylesBySelectionColor : Dict.Dict String (List ( String, String )) -> List Color -> Html Msg
 viewStylesBySelectionColor styles colors =
+    colors
+        |> List.map Just
+        |> (::) Nothing
+        |> List.map (viewStyleBySelectionColor styles)
+        |> ul []
+
+
+viewStyleBySelectionColor : Dict.Dict String (List ( String, String )) -> Maybe Color -> Html Msg
+viewStyleBySelectionColor styles maybeColor =
+    let
+        colorString =
+            maybeColorToString maybeColor
+    in
+        li []
+            [ h5 [] [ text colorString ]
+            , viewStyleInputs <| Maybe.withDefault [] <| Dict.get colorString styles
+            , hr [] []
+            ]
+
+
+viewStyleInputs : List ( String, String ) -> Html msg
+viewStyleInputs styles =
     ul [] <|
-        List.map (viewStyleBySelectionColor styles) colors
+        List.map viewStyleInput styles
 
 
-viewStyleBySelectionColor : TextUp.Config b -> Color -> Html Msg
-viewStyleBySelectionColor styles color =
+viewStyleInput : ( String, String ) -> Html msg
+viewStyleInput ( property, val ) =
     li []
-        [ h4 [] [ text <| colorToString color ]
-        , hr [] []
+        [ input [ value property ] []
+        , input [ value val ] []
         ]

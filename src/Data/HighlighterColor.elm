@@ -1,6 +1,7 @@
 module Data.HighlighterColor exposing (..)
 
 import Css
+import Dict
 import TextUp
 import Theme.Colors as Colors
 import Theme.Mixins as Mixins
@@ -31,6 +32,17 @@ highlightStyles =
     , green = highlight Colors.neonGreen
     , pink = highlight Colors.neonPink
     , red = highlight Colors.neonRed
+    }
+
+
+plainStyles : TextUp.Config HighlightStyles
+plainStyles =
+    { plain = Css.mixin []
+    , yellow = Css.mixin []
+    , blue = Css.mixin []
+    , green = Css.mixin []
+    , pink = Css.mixin []
+    , red = Css.mixin []
     }
 
 
@@ -104,3 +116,43 @@ colorToString color =
 
         Red ->
             "Red"
+
+
+setStylesByStringColor : String -> Css.Mixin -> TextUp.Config HighlightStyles -> TextUp.Config HighlightStyles
+setStylesByStringColor color styles current =
+    case color of
+        "Yellow" ->
+            { current | yellow = styles }
+
+        "Blue" ->
+            { current | blue = styles }
+
+        "Green" ->
+            { current | green = styles }
+
+        "Pink" ->
+            { current | pink = styles }
+
+        "Red" ->
+            { current | red = styles }
+
+        _ ->
+            { current | plain = styles }
+
+
+getStyles : Dict.Dict String (List ( String, String )) -> TextUp.Config HighlightStyles
+getStyles styles =
+    styles
+        |> Dict.toList
+        |> List.foldl
+            (\( color, colorStyles ) allStyles ->
+                setStylesByStringColor color (toMixin colorStyles) allStyles
+            )
+            plainStyles
+
+
+toMixin : List ( String, String ) -> Css.Mixin
+toMixin styles =
+    styles
+        |> List.map (uncurry Css.property)
+        |> Css.mixin
