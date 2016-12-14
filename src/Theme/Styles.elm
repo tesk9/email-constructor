@@ -36,23 +36,24 @@ styles =
         , property "justify-content" "space-around"
         ]
     , (.) SectionContainer
-        [ minWidth (px 400)
+        [ minWidth (px 500)
         , padding (px 16)
+        , margin2 zero (px 20)
         , firstChild
             [ backgroundColor clay0
-            , maxWidth (px 400)
+            , flexGrow (num 2)
             , color clay4
             ]
         , lastChild
             [ backgroundColor mustard0
+            , maxWidth (px 500)
             , color mustard4
             ]
         ]
     , (.) SectionHeader
         []
     , (.) OutputContainer
-        [ property "width" "60vw"
-        , property "min-height" "70vh"
+        [ property "min-height" "70vh"
         , border3 (px 2) solid mustard2
         , padding (px 8)
         , backgroundColor white
@@ -84,6 +85,8 @@ css =
 
 { class, classList, id } =
     currentNamespace
+
+
 currentNamespace : Html.CssHelpers.Namespace String a b c
 currentNamespace =
     withNamespace "constructor-"

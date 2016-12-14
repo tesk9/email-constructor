@@ -33,6 +33,12 @@ styles =
         , margin zero
         , padding zero
         ]
+    , label
+        [ fontSize (px 12)
+        , marginRight (px 4)
+        ]
     , input
-        [ preserveWhiteSpace ]
+        [ preserveWhiteSpace
+        , marginRight (px 8)
+        ]
     ]
