@@ -33,4 +33,6 @@ styles =
         , margin zero
         , padding zero
         ]
+    , input
+        [ preserveWhiteSpace ]
     ]
