@@ -6,8 +6,8 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import TextUp
 import Theme.Styles as Styles
-import Utils.Utils exposing (dictConsOrInsert)
-import Utils.ViewUtils exposing (onEnter)
+import Utils.Utils exposing (dictInsertUpdate)
+import Utils.ViewUtils exposing (onChange, onEnter)
 
 
 type alias Model a =
@@ -20,7 +20,7 @@ type alias Model a =
 
 type Msg
     = NoOp
-    | SetStyle String ( String, String )
+    | SetStyle String Int ( String, String )
 
 
 update : Msg -> Model a -> ( Model a, Cmd Msg )
@@ -29,8 +29,26 @@ update msg model =
         NoOp ->
             model ! []
 
-        SetStyle colorString style ->
-            { model | styles = dictConsOrInsert colorString style model.styles } ! []
+        SetStyle colorString index style ->
+            let
+                --TODO use a dict instead of a list
+                updateStylesById styles =
+                    if index == List.length styles then
+                        (::) style styles
+                    else
+                        List.indexedMap
+                            (\id value ->
+                                if id == index then
+                                    style
+                                else
+                                    value
+                            )
+                            styles
+
+                newStyles =
+                    dictInsertUpdate colorString style (Maybe.map updateStylesById) model.styles
+            in
+                { model | styles = newStyles } ! []
 
 
 view : Model a -> Html Msg
@@ -85,36 +103,50 @@ viewStyleBySelectionColor styles maybeColor =
             ]
 
 
-viewStyleInputs : String -> List ( String, String ) -> Html msg
+viewStyleInputs : String -> List ( String, String ) -> Html Msg
 viewStyleInputs colorString styles =
     ul [] <|
-        viewStyleInput (colorString ++ "new") ( "", "" )
-            :: List.indexedMap
-                (\id styleTuple ->
-                    viewStyleInput (colorString ++ toString id) styleTuple
-                )
-                styles
+        List.reverse <|
+            viewStyleInput (List.length styles) colorString ( "", "" )
+                :: List.indexedMap
+                    (\id styleTuple ->
+                        viewStyleInput id colorString styleTuple
+                    )
+                    styles
 
 
-viewStyleInput : String -> ( String, String ) -> Html msg
-viewStyleInput idBase ( property, val ) =
-    li []
-        [ label
-            [ for ("input-" ++ idBase ++ "-property") ]
-            [ text "Property" ]
-        , input
-            [ id ("input-" ++ idBase ++ "-property")
-            , value property
-            , placeholder "font-family"
+viewStyleInput : Int -> String -> ( String, String ) -> Html Msg
+viewStyleInput index colorString ( property, val ) =
+    let
+        idBase =
+            "input-" ++ colorString ++ "-" ++ toString index
+
+        propertyId =
+            idBase ++ "-property"
+
+        valueId =
+            idBase ++ "-value"
+    in
+        li []
+            [ label
+                [ for propertyId ]
+                [ text "Property" ]
+            , input
+                [ id propertyId
+                , value property
+                , placeholder "font-family"
+                , onChange (\newProperty -> SetStyle colorString index ( newProperty, val ))
+                ]
+                []
+            , label
+                [ for valueId
+                ]
+                [ text "Value" ]
+            , input
+                [ id valueId
+                , value val
+                , placeholder "fantasy"
+                , onChange (\newVal -> SetStyle colorString index ( property, newVal ))
+                ]
+                []
             ]
-            []
-        , label
-            [ for ("input-" ++ idBase ++ "-value") ]
-            [ text "Value" ]
-        , input
-            [ id ("input-" ++ idBase ++ "-value")
-            , value val
-            , placeholder "fantasy"
-            ]
-            []
-        ]

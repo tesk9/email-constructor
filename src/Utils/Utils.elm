@@ -11,9 +11,9 @@ dictToggleOrReplace key v dict =
         Dict.insert key v dict
 
 
-dictConsOrInsert : comparable -> a -> Dict.Dict comparable (List a) -> Dict.Dict comparable (List a)
-dictConsOrInsert key v dict =
+dictInsertUpdate : comparable -> a -> (Maybe (List a) -> Maybe (List a)) -> Dict.Dict comparable (List a) -> Dict.Dict comparable (List a)
+dictInsertUpdate key v map dict =
     if Dict.member key dict then
-        Dict.update key (Maybe.map ((::) v)) dict
+        Dict.update key map dict
     else
         Dict.insert key [ v ] dict
