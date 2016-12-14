@@ -41,25 +41,33 @@ highlight color =
 
 toTextUpString : ( String, Maybe Color ) -> TextUp.TextUpString HighlightStyles
 toTextUpString ( str, maybeColor ) =
-    (,) str <|
-        case maybeColor of
-            Just Yellow ->
-                .yellow
+    (,) str (maybeColorToAccessor maybeColor)
 
-            Just Blue ->
-                .blue
 
-            Just Green ->
-                .green
+maybeColorToAccessor : Maybe Color -> (TextUp.Config HighlightStyles -> Css.Mixin)
+maybeColorToAccessor maybeColor =
+    maybeColor
+        |> Maybe.map colorToAccessor
+        |> Maybe.withDefault .plain
 
-            Just Pink ->
-                .pink
 
-            Just Red ->
-                .red
+colorToAccessor : Color -> (TextUp.Config HighlightStyles -> Css.Mixin)
+colorToAccessor color =
+    case color of
+        Yellow ->
+            .yellow
 
-            Nothing ->
-                .plain
+        Blue ->
+            .blue
+
+        Green ->
+            .green
+
+        Pink ->
+            .pink
+
+        Red ->
+            .red
 
 
 highlightColors : List Color
@@ -70,6 +78,13 @@ highlightColors =
     , Pink
     , Red
     ]
+
+
+maybeColorToString : Maybe Color -> String
+maybeColorToString maybeColor =
+    maybeColor
+        |> Maybe.map colorToString
+        |> Maybe.withDefault "Default"
 
 
 colorToString : Color -> String
