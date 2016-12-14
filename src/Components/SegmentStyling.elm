@@ -190,4 +190,4 @@ viewStyleRowAddingButton colorString =
 
 viewStyleRemovingButton : String -> Int -> Html Msg
 viewStyleRemovingButton colorString index =
-    button [ onClick (RemoveStyleRule colorString index) ] [ text "X" ]
+    button [ onClick (RemoveStyleRule colorString index) ] [ text "Remove style." ]
