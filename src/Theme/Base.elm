@@ -27,4 +27,10 @@ styles =
         , boxSizing borderBox
         , color blue4
         ]
+    , ul
+        [ textDecoration none
+        , listStyle none
+        , margin zero
+        , padding zero
+        ]
     ]
