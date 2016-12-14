@@ -24,6 +24,7 @@ type Msg
     = NoOp
     | SetStyle String Int ( String, String )
     | AddStyleRule String
+    | RemoveStyleRule String Int
 
 
 update : Msg -> Model a -> ( Model a, Cmd Msg )
@@ -55,6 +56,21 @@ update msg model =
 
         AddStyleRule colorString ->
             { model | styles = dictInsertUpdate colorString ( "", "" ) (Maybe.map ((::) ( "", "" ))) model.styles } ! []
+
+        RemoveStyleRule colorString index ->
+            let
+                filter styles =
+                    styles
+                        |> List.indexedMap (,)
+                        |> List.filterMap
+                            (\( id, v ) ->
+                                if id /= index then
+                                    Just v
+                                else
+                                    Nothing
+                            )
+            in
+                { model | styles = Dict.update colorString (Maybe.map filter) model.styles } ! []
 
 
 view : Model a -> Html Msg
@@ -163,9 +179,15 @@ viewStyleInput index colorString ( property, val ) =
                 , onEnter (AddStyleRule colorString)
                 ]
                 []
+            , viewStyleRemovingButton colorString index
             ]
 
 
 viewStyleRowAddingButton : String -> Html Msg
 viewStyleRowAddingButton colorString =
     button [ onClick (AddStyleRule colorString) ] [ text "Add another style." ]
+
+
+viewStyleRemovingButton : String -> Int -> Html Msg
+viewStyleRemovingButton colorString index =
+    button [ onClick (RemoveStyleRule colorString index) ] [ text "X" ]
