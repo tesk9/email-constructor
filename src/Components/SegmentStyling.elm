@@ -3,7 +3,9 @@ module Components.SegmentStyling exposing (Model, view, update, Msg)
 import Data.HighlighterColor exposing (..)
 import Dict
 import Html exposing (..)
+import Html.Events exposing (onClick)
 import Html.Attributes exposing (..)
+import Set
 import TextUp
 import Theme.Styles as Styles
 import Utils.Utils exposing (dictInsertUpdate)
@@ -21,6 +23,7 @@ type alias Model a =
 type Msg
     = NoOp
     | SetStyle String Int ( String, String )
+    | AddStyleRule String
 
 
 update : Msg -> Model a -> ( Model a, Cmd Msg )
@@ -50,6 +53,9 @@ update msg model =
             in
                 { model | styles = newStyles } ! []
 
+        AddStyleRule colorString ->
+            { model | styles = dictInsertUpdate colorString ( "", "" ) (Maybe.map ((::) ( "", "" ))) model.styles } ! []
+
 
 view : Model a -> Html Msg
 view model =
@@ -65,7 +71,11 @@ view model =
                     }
                 )
             |> viewFragments
-        , viewStylesBySelectionColor model.styles (Dict.values model.highlightedFragments)
+        , viewStylesBySelectionColor model.styles
+            (Dict.values model.highlightedFragments
+                |> List.map colorToString
+                |> Set.fromList
+            )
         ]
 
 
@@ -81,9 +91,13 @@ viewFragment fragment =
         [ TextUp.toHtml highlightStyles [ toTextUpString ( fragment.content, fragment.color ) ] ]
 
 
-viewStylesBySelectionColor : Dict.Dict String (List ( String, String )) -> List Color -> Html Msg
+viewStylesBySelectionColor : Dict.Dict String (List ( String, String )) -> Set.Set String -> Html Msg
 viewStylesBySelectionColor styles colors =
-    colors
+    highlightColors
+        |> List.filter
+            (\color ->
+                Set.member (colorToString color) colors
+            )
         |> List.map Just
         |> (::) Nothing
         |> List.map (viewStyleBySelectionColor styles)
@@ -99,6 +113,7 @@ viewStyleBySelectionColor styles maybeColor =
         li []
             [ h5 [] [ text colorString ]
             , viewStyleInputs colorString <| Maybe.withDefault [] <| Dict.get colorString styles
+            , viewStyleRowAddingButton colorString
             , hr [] []
             ]
 
@@ -106,13 +121,11 @@ viewStyleBySelectionColor styles maybeColor =
 viewStyleInputs : String -> List ( String, String ) -> Html Msg
 viewStyleInputs colorString styles =
     ul [] <|
-        List.reverse <|
-            viewStyleInput (List.length styles) colorString ( "", "" )
-                :: List.indexedMap
-                    (\id styleTuple ->
-                        viewStyleInput id colorString styleTuple
-                    )
-                    styles
+        List.indexedMap
+            (\id styleTuple ->
+                viewStyleInput id colorString styleTuple
+            )
+            styles
 
 
 viewStyleInput : Int -> String -> ( String, String ) -> Html Msg
@@ -147,6 +160,12 @@ viewStyleInput index colorString ( property, val ) =
                 , value val
                 , placeholder "fantasy"
                 , onChange (\newVal -> SetStyle colorString index ( property, newVal ))
+                , onEnter (AddStyleRule colorString)
                 ]
                 []
             ]
+
+
+viewStyleRowAddingButton : String -> Html Msg
+viewStyleRowAddingButton colorString =
+    button [ onClick (AddStyleRule colorString) ] [ text "Add another style." ]
