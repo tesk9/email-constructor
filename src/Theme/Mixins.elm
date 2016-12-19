@@ -17,6 +17,7 @@ editingBox =
         , fontFamily serif
         , padding (px 4)
         , preserveWhiteSpace
+        , overflow scroll
         ]
 
 
